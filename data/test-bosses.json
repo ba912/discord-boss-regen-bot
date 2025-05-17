@@ -1,0 +1,14 @@
+{
+  "bosses": [
+    {
+      "id": 1,
+      "name": "휴가중",
+      "respawnType": "fixed_hour",
+      "respawnHours": 4,
+      "lastKilled": null,
+      "description": "5분 테스트용 보스",
+      "location": "테스트 지역",
+      "minutesUntil": 5
+    }
+  ]
+}

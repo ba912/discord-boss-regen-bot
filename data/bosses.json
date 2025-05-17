@@ -1,0 +1,320 @@
+{
+  "bosses": [
+    {
+      "id": 1,
+      "name": "베나투스",
+      "respawnType": "fixed_hour",
+      "respawnHours": 4,
+      "lastKilled": "2025-05-17T02:26:50.572Z",
+      "description": "보스가 죽은 시간 이후 4시간마다 리젠",
+      "location": "오염된 강줄기"
+    },
+    {
+      "id": 2,
+      "name": "클레멘티스",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "월",
+        "금"
+      ],
+      "respawnTime": "12:30",
+      "lastKilled": null,
+      "description": "월/금 12:30에 리젠",
+      "location": "하얀 마녀의 요람"
+    },
+    {
+      "id": 4,
+      "name": "사피루스",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "화",
+        "토"
+      ],
+      "respawnTime": "12:30",
+      "lastKilled": "2025-05-17T03:31:51.356Z",
+      "description": "화요일 12:30, 토요일 12:30에 리젠",
+      "location": "달빛 숙박"
+    },
+    {
+      "id": 5,
+      "name": "레이디달리아",
+      "respawnType": "fixed_hour",
+      "respawnHours": 14,
+      "lastKilled": "2025-05-17T01:27:00.000Z",
+      "description": "보스가 죽은 시간 이후 14시간마다 리젠",
+      "location": "핏빛 그늘"
+    },
+    {
+      "id": 6,
+      "name": "튀멜레",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "월",
+        "금"
+      ],
+      "respawnTime": "18:00",
+      "lastKilled": null,
+      "description": "월/금 오후 6시에 리젠",
+      "location": "폭주의 자국"
+    },
+    {
+      "id": 9,
+      "name": "언두미엘",
+      "respawnType": "fixed_hour",
+      "respawnHours": 18,
+      "lastKilled": "2025-05-17T01:48:00.000Z",
+      "description": "보스가 죽은 시간 이후 18시간마다 리젠",
+      "location": "실험체 연구실"
+    },
+    {
+      "id": 10,
+      "name": "가레스",
+      "respawnType": "fixed_hour",
+      "respawnHours": 24,
+      "lastKilled": "2025-05-17T01:56:00.000Z",
+      "description": "보스가 죽은 시간 이후 24시간마다 리젠",
+      "location": "죽은 자의 대지 1구역"
+    },
+    {
+      "id": 11,
+      "name": "네우트로",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "화",
+        "목"
+      ],
+      "respawnTime": "18:00",
+      "lastKilled": null,
+      "description": "화요일/목요일 오후 6시에 리젠",
+      "location": "애증의 결전"
+    },
+    {
+      "id": 12,
+      "name": "아멘티스",
+      "respawnType": "fixed_hour",
+      "respawnHours": 22,
+      "lastKilled": "2025-05-16T19:25:00.000Z",
+      "description": "보스가 죽은 시간 이후 22시간마다 리젠",
+      "location": "석회암곶"
+    },
+    {
+      "id": 13,
+      "name": "남작브라우드모어",
+      "respawnType": "fixed_hour",
+      "respawnHours": 24,
+      "lastKilled": "2025-05-17T01:35:56.142Z",
+      "description": "보스가 죽은 시간 이후 24시간마다 리젠",
+      "location": "장미 덩굴 다리"
+    },
+    {
+      "id": 16,
+      "name": "티토르",
+      "respawnType": "fixed_hour",
+      "respawnHours": 28,
+      "lastKilled": "2025-05-16T09:29:00.000Z",
+      "description": "보스가 죽은 시간 이후 28시간마다 리젠",
+      "location": "죽은 자의 대지 2구역"
+    },
+    {
+      "id": 36,
+      "name": "와니타스",
+      "respawnType": "fixed_hour",
+      "respawnHours": 36,
+      "lastKilled": "2025-05-17T01:16:00.000Z",
+      "description": "보스가 죽은 시간 이후 36시간마다 리젠",
+      "location": "올가미 수렁"
+    },
+    {
+      "id": 38,
+      "name": "메투스",
+      "respawnType": "fixed_hour",
+      "respawnHours": 48,
+      "lastKilled": "2025-05-17T01:24:00.000Z",
+      "description": "보스가 죽은 시간 이후 48시간마다 리젠",
+      "location": "추종자 벌판"
+    },
+    {
+      "id": 39,
+      "name": "카테나",
+      "respawnType": "fixed_hour",
+      "respawnHours": 26,
+      "lastKilled": "2025-05-16T05:39:00.000Z",
+      "description": "보스가 죽은 시간 이후 26시간마다 리젠",
+      "location": "죽은 자의 대지 3구역"
+    },
+    {
+      "id": 40,
+      "name": "밀라베",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "토"
+      ],
+      "respawnTime": "18:00",
+      "lastKilled": null,
+      "description": "토요일 오후 6시에 리젠",
+      "location": "애증의 결전"
+    },
+    {
+      "id": 41,
+      "name": "슈라이어",
+      "respawnType": "fixed_hour",
+      "respawnHours": 26,
+      "lastKilled": "2025-05-16T05:42:00.000Z",
+      "description": "보스가 죽은 시간 이후 28시간마다 리젠",
+      "location": "사냥개의 가면극"
+    },
+    {
+      "id": 42,
+      "name": "라르바",
+      "respawnType": "fixed_hour",
+      "respawnHours": 26,
+      "lastKilled": "2025-05-16T05:47:00.000Z",
+      "description": "보스가 죽은 시간 이후 26시간마다 리젠",
+      "location": "가르바나 간척지"
+    },
+    {
+      "id": 43,
+      "name": "듀플리칸",
+      "respawnType": "fixed_hour",
+      "respawnHours": 36,
+      "lastKilled": "2025-05-17T01:19:00.000Z",
+      "description": "보스가 죽은 시간 이후 36시간마다 리젠",
+      "location": "눈 뜬 꼭두각시의 옥좌"
+    },
+    {
+      "id": 44,
+      "name": "링고르",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "토"
+      ],
+      "respawnTime": "16:00",
+      "lastKilled": null,
+      "description": "토요일 오후 4시에 리젠",
+      "location": "횃불 가도"
+    },
+    {
+      "id": 45,
+      "name": "로데릭",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "수"
+      ],
+      "respawnTime": "19:30",
+      "lastKilled": null,
+      "description": "수요일 오후 7시30분에 리젠",
+      "location": "가르바나 지하수로 1층"
+    },
+    {
+      "id": 46,
+      "name": "세크레타",
+      "respawnType": "fixed_hour",
+      "respawnHours": 46,
+      "lastKilled": "2025-05-15T23:36:00.000Z",
+      "description": "보스가 죽은 시간 이후 46시간마다 리젠",
+      "location": "칼리온의 무덤"
+    },
+    {
+      "id": 47,
+      "name": "오르도",
+      "respawnType": "fixed_hour",
+      "respawnHours": 46,
+      "lastKilled": "2025-05-15T23:26:00.000Z",
+      "description": "보스가 죽은 시간 이후 46시간마다 리젠",
+      "location": "후계자의 낙원"
+    },
+    {
+      "id": 48,
+      "name": "아스타",
+      "respawnType": "fixed_hour",
+      "respawnHours": 46,
+      "lastKilled": "2025-05-15T23:22:00.000Z",
+      "description": "보스가 죽은 시간 이후 46시간마다 리젠",
+      "location": "황금피의 평원"
+    },
+    {
+      "id": 49,
+      "name": "수포르",
+      "respawnType": "fixed_hour",
+      "respawnHours": 46,
+      "lastKilled": "2025-05-15T23:33:00.000Z",
+      "description": "보스가 죽은 시간 이후 46시간마다 리젠",
+      "location": "황금피 평원"
+    },
+    {
+      "id": 50,
+      "name": "아우라크",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "목",
+        "금"
+      ],
+      "respawnTime": "19:30",
+      "lastKilled": null,
+      "description": "목/금 오후 7시30분에 리젠",
+      "location": "가르바나 지하수로 2층"
+    },
+    {
+      "id": 51,
+      "name": "샤이프락",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "토"
+      ],
+      "respawnTime": "23:00",
+      "lastKilled": null,
+      "description": "토요일 오후 11시에 리젠",
+      "location": "칼리온의 무덤"
+    },
+    {
+      "id": 52,
+      "name": "벤지",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "일"
+      ],
+      "respawnTime": "22:00",
+      "lastKilled": null,
+      "description": "일요일 오후 10시에 리젠",
+      "location": "복수의 둥지"
+    },
+    {
+      "id": 53,
+      "name": "리비티나",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "화",
+        "토"
+      ],
+      "respawnTime": "21:30",
+      "lastKilled": null,
+      "description": "화요일/토요일 오후 9시30분에 리젠",
+      "location": "영원한 종속의 예배당"
+    },
+    {
+      "id": 54,
+      "name": "라카제스",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "월",
+        "금"
+      ],
+      "respawnTime": "23:00",
+      "lastKilled": null,
+      "description": "월/금 오후 11시에 리젠",
+      "location": "세크레타의 형벌"
+    },
+    {
+      "id": 55,
+      "name": "투미어",
+      "respawnType": "fixed_days",
+      "respawnDays": [
+        "일"
+      ],
+      "respawnTime": "21:00",
+      "lastKilled": null,
+      "description": "일요일 오후 9시에 리젠",
+      "location": "가르바나 지하수로 3층"
+    }
+  ]
+}
