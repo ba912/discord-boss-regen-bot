@@ -5,7 +5,7 @@
       "name": "베나투스",
       "respawnType": "fixed_hour",
       "respawnHours": 4,
-      "lastKilled": "2025-05-25T15:33:44.376Z",
+      "lastKilled": "2025-05-30T03:08:26.183Z",
       "description": "보스가 죽은 시간 이후 4시간마다 리젠",
       "location": "오염된 강줄기"
     },
@@ -18,7 +18,7 @@
         "금"
       ],
       "respawnTime": "12:30",
-      "lastKilled": "2025-05-23T03:32:00.000Z",
+      "lastKilled": "2025-05-30T03:33:15.304Z",
       "description": "월/금 12:30에 리젠",
       "location": "하얀 마녀의 요람"
     },
@@ -40,7 +40,7 @@
       "name": "레이디달리아",
       "respawnType": "fixed_hour",
       "respawnHours": 14,
-      "lastKilled": "2025-05-25T06:36:21.964Z",
+      "lastKilled": "2025-05-30T03:19:37.119Z",
       "description": "보스가 죽은 시간 이후 14시간마다 리젠",
       "location": "핏빛 그늘"
     },
@@ -62,7 +62,7 @@
       "name": "언두미엘",
       "respawnType": "fixed_hour",
       "respawnHours": 18,
-      "lastKilled": "2025-05-25T09:26:01.759Z",
+      "lastKilled": "2025-05-30T03:17:06.063Z",
       "description": "보스가 죽은 시간 이후 18시간마다 리젠",
       "location": "실험체 연구실"
     },
@@ -71,7 +71,7 @@
       "name": "가레스",
       "respawnType": "fixed_hour",
       "respawnHours": 24,
-      "lastKilled": "2025-05-25T02:39:07.488Z",
+      "lastKilled": "2025-05-30T03:24:01.766Z",
       "description": "보스가 죽은 시간 이후 24시간마다 리젠",
       "location": "죽은 자의 대지 1구역"
     },
@@ -93,7 +93,7 @@
       "name": "아멘티스",
       "respawnType": "fixed_hour",
       "respawnHours": 22,
-      "lastKilled": "2025-05-25T02:03:37.422Z",
+      "lastKilled": "2025-05-30T03:18:11.702Z",
       "description": "보스가 죽은 시간 이후 22시간마다 리젠",
       "location": "석회암곶"
     },
@@ -102,7 +102,7 @@
       "name": "남작브라우드모어",
       "respawnType": "fixed_hour",
       "respawnHours": 24,
-      "lastKilled": "2025-05-25T02:22:42.384Z",
+      "lastKilled": "2025-05-30T03:22:19.938Z",
       "description": "보스가 죽은 시간 이후 24시간마다 리젠",
       "location": "장미 덩굴 다리"
     },
@@ -111,7 +111,7 @@
       "name": "티토르",
       "respawnType": "fixed_hour",
       "respawnHours": 28,
-      "lastKilled": "2025-05-22T05:47:18.770Z",
+      "lastKilled": "2025-05-30T03:25:41.159Z",
       "description": "보스가 죽은 시간 이후 28시간마다 리젠",
       "location": "죽은 자의 대지 2구역"
     },
@@ -120,7 +120,7 @@
       "name": "와니타스",
       "respawnType": "fixed_hour",
       "respawnHours": 36,
-      "lastKilled": "2025-05-24T13:32:27.534Z",
+      "lastKilled": "2025-05-30T03:35:04.056Z",
       "description": "보스가 죽은 시간 이후 36시간마다 리젠",
       "location": "올가미 수렁"
     },
@@ -129,7 +129,7 @@
       "name": "메투스",
       "respawnType": "fixed_hour",
       "respawnHours": 36,
-      "lastKilled": "2025-05-24T13:42:58.983Z",
+      "lastKilled": "2025-05-30T03:37:36.263Z",
       "description": "보스가 죽은 시간 이후 48시간마다 리젠",
       "location": "추종자 벌판"
     },
@@ -138,7 +138,7 @@
       "name": "카테나",
       "respawnType": "fixed_hour",
       "respawnHours": 26,
-      "lastKilled": "2025-05-24T22:11:22.797Z",
+      "lastKilled": "2025-05-30T03:28:13.949Z",
       "description": "보스가 죽은 시간 이후 26시간마다 리젠",
       "location": "죽은 자의 대지 3구역"
     },
@@ -159,7 +159,7 @@
       "name": "슈라이어",
       "respawnType": "fixed_hour",
       "respawnHours": 26,
-      "lastKilled": "2025-05-24T22:19:45.269Z",
+      "lastKilled": "2025-05-30T03:29:49.091Z",
       "description": "보스가 죽은 시간 이후 28시간마다 리젠",
       "location": "사냥개의 가면극"
     },
@@ -168,7 +168,7 @@
       "name": "라르바",
       "respawnType": "fixed_hour",
       "respawnHours": 26,
-      "lastKilled": "2025-05-24T22:28:55.171Z",
+      "lastKilled": "2025-05-30T03:31:26.860Z",
       "description": "보스가 죽은 시간 이후 26시간마다 리젠",
       "location": "가르바나 간척지"
     },
@@ -177,7 +177,7 @@
       "name": "듀플리칸",
       "respawnType": "fixed_hour",
       "respawnHours": 36,
-      "lastKilled": "2025-05-24T13:37:35.003Z",
+      "lastKilled": "2025-05-30T03:36:29.460Z",
       "description": "보스가 죽은 시간 이후 36시간마다 리젠",
       "location": "눈 뜬 꼭두각시의 옥좌"
     },
@@ -210,7 +210,7 @@
       "name": "세크레타",
       "respawnType": "fixed_hour",
       "respawnHours": 46,
-      "lastKilled": "2025-05-25T13:52:31.307Z",
+      "lastKilled": "2025-05-30T03:42:10.052Z",
       "description": "보스가 죽은 시간 이후 46시간마다 리젠",
       "location": "칼리온의 무덤"
     },
@@ -219,7 +219,7 @@
       "name": "오르도",
       "respawnType": "fixed_hour",
       "respawnHours": 46,
-      "lastKilled": "2025-05-25T13:57:00.000Z",
+      "lastKilled": "2025-05-30T03:43:53.767Z",
       "description": "보스가 죽은 시간 이후 46시간마다 리젠",
       "location": "후계자의 낙원"
     },
@@ -228,7 +228,7 @@
       "name": "아스타",
       "respawnType": "fixed_hour",
       "respawnHours": 46,
-      "lastKilled": "2025-05-25T13:46:00.000Z",
+      "lastKilled": "2025-05-30T03:39:19.865Z",
       "description": "보스가 죽은 시간 이후 46시간마다 리젠",
       "location": "황금피의 평원"
     },
@@ -237,7 +237,7 @@
       "name": "수포르",
       "respawnType": "fixed_hour",
       "respawnHours": 46,
-      "lastKilled": "2025-05-25T13:49:17.137Z",
+      "lastKilled": "2025-05-30T03:40:45.588Z",
       "description": "보스가 죽은 시간 이후 46시간마다 리젠",
       "location": "황금피 평원"
     },

@@ -43,6 +43,8 @@ async function sendTextMessage(message) {
  * @returns {Promise<boolean>} - 성공 여부
  */
 async function playVoiceMessage(message, options = {}) {
+  let audioFilePath; // audioFilePath 변수를 try 블록 외부에서 선언
+  
   try {
     // 기본 TTS 옵션
     const ttsOptions = {
@@ -51,7 +53,7 @@ async function playVoiceMessage(message, options = {}) {
     };
     
     // TTS 음성 파일 생성
-    const audioFilePath = await generateTTSAudio(message, ttsOptions);
+    audioFilePath = await generateTTSAudio(message, ttsOptions);
     
     // 음성 재생
     await playAudio(audioFilePath);

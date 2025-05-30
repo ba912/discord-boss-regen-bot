@@ -1,14 +1,19 @@
 import 'dotenv/config';
 import { Client, GatewayIntentBits } from 'discord.js';
 
-// Discord.js 클라이언트 생성 - 필요한 인텐트 설정
+// Discord.js 클라이언트 생성 - 필요한 인텐트 설정 및 디버그 옵션 추가
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent, // 메시지 내용 읽기 인텐트 추가 (슬래시 명령어 동작에 필수)
-    GatewayIntentBits.GuildVoiceStates // 음성 채널 사용을 위한 인텐트 추가
-  ]
+    GatewayIntentBits.GuildVoiceStates, // 음성 채널 사용을 위한 인텐트 추가
+    GatewayIntentBits.DirectMessages // DM 메시지 접근 허용
+  ],
+  partials: ['CHANNEL'], // 부분적 객체 활성화
+  rest: { timeout: 60000 }, // REST 타임아웃 증가
+  failIfNotExists: false, // 존재하지 않는 항목에 대한 오류 방지
+  retryLimit: 5 // 재시도 횟수 증가
 });
 
 /**
