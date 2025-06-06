@@ -2,7 +2,7 @@
   "bosses": [
     {
       "id": 1,
-      "name": "휴가중",
+      "name": "성동일",
       "respawnType": "fixed_hour",
       "respawnHours": 4,
       "lastKilled": null,

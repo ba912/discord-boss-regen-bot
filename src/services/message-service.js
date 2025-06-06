@@ -3,6 +3,7 @@ import { generateTTSAudio } from '../tts/tts-service.js';
 import { playAudio } from '../discord/voice.js';
 import { client } from '../discord/client.js';
 import { processBossCommand } from './boss-command-service.js';
+import { queueVoiceMessage } from '../tts/voice-queue.js';
 
 /**
  * 텍스트 메시지만 보내는 함수 (명령어 응답용)
@@ -37,12 +38,13 @@ async function sendTextMessage(message) {
 }
 
 /**
- * 음성 메시지만 재생하는 함수
+ * 실제로 음성 메시지를 생성하고 재생하는 함수
+ * @private
  * @param {string} message - 재생할 음성 메시지 내용
  * @param {Object} options - TTS 옵션 (선택사항)
  * @returns {Promise<boolean>} - 성공 여부
  */
-async function playVoiceMessage(message, options = {}) {
+async function _playVoiceMessageInternal(message, options = {}) {
   let audioFilePath; // audioFilePath 변수를 try 블록 외부에서 선언
   
   try {
@@ -57,7 +59,7 @@ async function playVoiceMessage(message, options = {}) {
     
     // 음성 재생
     await playAudio(audioFilePath);
-    console.log('음성 메시지가 재생되었습니다.');
+    console.log(`음성 메시지 재생 완료: "${message}"`);
     
     return true;
   } catch (error) {
@@ -70,6 +72,23 @@ async function playVoiceMessage(message, options = {}) {
         setTimeout(() => cleanupTTSFile(audioFilePath), 2000); // 재생 완료 후 2초 뒤 파일 삭제 시도
       });
     }
+  }
+}
+
+/**
+ * 음성 메시지를 대기열에 추가하여 순차적으로 재생하는 함수
+ * @param {string} message - 재생할 음성 메시지 내용
+ * @param {Object} options - TTS 옵션 (선택사항)
+ * @returns {Promise<boolean>} - 성공 여부
+ */
+async function playVoiceMessage(message, options = {}) {
+  try {
+    // 대기열에 음성 메시지 추가
+    await queueVoiceMessage(message, options, _playVoiceMessageInternal);
+    return true;
+  } catch (error) {
+    console.error('음성 메시지 대기열 처리 중 오류:', error);
+    return false;
   }
 }
 

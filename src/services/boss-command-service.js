@@ -147,10 +147,10 @@ async function sendBossSchedule(messageSender = sendTextMessage) {
     return;
   }
   
-  let message = '📅 [보스 리젠 일정] 📅\n\n';
+  let message = '```📅 보스 리젠 일정 📅\n';
   
   for (const item of respawnList) {
-    const { boss, formattedTime, minutesUntil } = item;
+    const { boss, formattedTime, minutesUntil, respawnTime } = item;
     
     let timeInfo;
     if (minutesUntil === null) {
@@ -163,8 +163,25 @@ async function sendBossSchedule(messageSender = sendTextMessage) {
       timeInfo = `${hours > 0 ? `${hours}시간 ` : ''}${minutes > 0 ? `${minutes}분` : ''} 남음`;
     }
     
-    message += `💹 ${boss.name}: ${formattedTime} (${timeInfo})\n`;
+    // 시간 부분만 추출 (HH:MM 형식)
+    const timeOnly = respawnTime ? `${respawnTime.getHours().toString().padStart(2, '0')}:${respawnTime.getMinutes().toString().padStart(2, '0')}` : '??:??';
+    
+    // 일정한 열 너비 사용하여 깔끔한 표 형태로 표현
+    const paddedTime = timeOnly.padEnd(8, ' '); // 시간 열 (예: "12:00   ")
+    const columnWidth = 20; // 보스 이름을 표시할 열의 너비
+    
+    // 보스 이름이 columnWidth를 초과하면 잘라내고, 부족하면 공백으로 채움
+    let displayName = boss.name;
+    if (displayName.length > columnWidth) {
+      displayName = displayName.substring(0, columnWidth - 3) + '...';
+    }
+    const paddedBossName = displayName.padEnd(columnWidth, ' ');
+    
+    // message += `${paddedTime}${paddedBossName}(${timeInfo})\n`;
+    message += `${paddedTime}${paddedBossName}\n`;
   }
+  
+  message += '```';
   
   await messageSender(message);
 }
