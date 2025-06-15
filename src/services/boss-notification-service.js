@@ -6,11 +6,13 @@ import { formatDate } from '../utils/time-utils.js';
 const TEXT_NOTIFICATION_MESSAGES = {
   // 5분 전 알림
   5: (boss, respawnTime) => {
-    return `⚠️ [보스 리젠 알림] ⚠️\n${boss.name}이(가) ${formatDate(respawnTime)}에 리젠됩니다. 아직 5분 남았습니다!`;
+    // return `⚠️ [보스 리젠 알림] ⚠️\n${boss.name}이(가) ${formatDate(respawnTime)}에 리젠됩니다. 아직 5분 남았습니다!`;
+    return `⚠️${boss.name}리젠 5분전`;
   },
   // 1분 전 알림
   1: (boss, respawnTime) => {
-    return `🔴 [보스 리젠 임박] 🔴\n${boss.name}이(가) ${formatDate(respawnTime)}에 리젠됩니다. 1분 남았습니다! 준비하세요!`;
+    // return `🔴 [보스 리젠 임박] 🔴\n${boss.name}이(가) ${formatDate(respawnTime)}에 리젠됩니다. 1분 남았습니다! 준비하세요!`;
+    return `⚠️${boss.name}리젠 1분전`;
   }
 };
 
