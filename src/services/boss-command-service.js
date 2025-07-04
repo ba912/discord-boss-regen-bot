@@ -90,6 +90,18 @@ async function processBossCommand(command) {
       return true;
     }
     
+    // 보스 복구 명령어
+    if (mainCommand === '!보스복구') {
+      if (args.length < 2) {
+        await sendTextMessage('사용법: !보스복구 [백업키]');
+        return false;
+      }
+      
+      const gistId = args[1];
+      await sendBossRestore(gistId);
+      return true;
+    }
+    
     // 테스트 명령어
     if (mainCommand === '!테스트') {
       await runTestNotifications();
@@ -240,6 +252,47 @@ async function sendBossSchedule(messageSender = sendTextMessage) {
 }
 
 /**
+ * GitHub Gist에서 데이터를 다운로드하는 함수
+ * @param {string} gistId - Gist ID
+ * @returns {Promise<Object|null>} 다운로드된 데이터 또는 null
+ */
+async function downloadFromGist(gistId) {
+  try {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) {
+      console.error('GITHUB_TOKEN이 설정되지 않았습니다.');
+      return null;
+    }
+
+    const response = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: {
+        'Authorization': `token ${token}`,
+        'User-Agent': 'Discord-Boss-Bot'
+      }
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('Gist 다운로드 실패:', error);
+      return null;
+    }
+
+    const result = await response.json();
+    const bossesFile = result.files['bosses.json'];
+    
+    if (!bossesFile) {
+      console.error('bosses.json 파일을 찾을 수 없습니다.');
+      return null;
+    }
+
+    return JSON.parse(bossesFile.content);
+  } catch (error) {
+    console.error('Gist 다운로드 중 오류:', error);
+    return null;
+  }
+}
+
+/**
  * 보스 데이터를 GitHub Gist로 백업하는 함수
  * @param {Function} messageSender - 메시지 전송 함수 (선택사항)
  */
@@ -252,13 +305,39 @@ async function sendBossBackup(messageSender = sendTextMessage) {
     
     if (gistUrl) {
       const backupTime = new Date().toLocaleString('ko-KR');
-      await messageSender(`✅ 백업이 완료되었습니다!\n\n📅 백업 시간: ${backupTime}`);
+      // Gist URL에서 ID 추출
+      const gistId = gistUrl.split('/').pop();
+      await messageSender(`✅ 백업이 완료되었습니다!\n\n📅 백업 시간: ${backupTime}\n🔑 백업키: ${gistId}`);
     } else {
       await messageSender('❌ 백업 중 오류가 발생했습니다.');
     }
   } catch (error) {
     console.error('보스 백업 중 오류:', error);
     await messageSender('❌ 백업 중 오류가 발생했습니다.');
+  }
+}
+
+/**
+ * 보스 데이터를 GitHub Gist에서 복구하는 함수
+ * @param {string} gistId - Gist ID
+ * @param {Function} messageSender - 메시지 전송 함수 (선택사항)
+ */
+async function sendBossRestore(gistId, messageSender = sendTextMessage) {
+  try {
+    await messageSender('🔄 보스 데이터 복구를 시작합니다...');
+    
+    const data = await downloadFromGist(gistId);
+    
+    if (data) {
+      saveBossData(data);
+      const restoreTime = new Date().toLocaleString('ko-KR');
+      await messageSender(`✅ 복구가 완료되었습니다!\n\n📅 복구 시간: ${restoreTime}\n🔑 복구키: ${gistId}`);
+    } else {
+      await messageSender('❌ 복구 중 오류가 발생했습니다. 백업키를 확인해주세요.');
+    }
+  } catch (error) {
+    console.error('보스 복구 중 오류:', error);
+    await messageSender('❌ 복구 중 오류가 발생했습니다.');
   }
 }
 
@@ -272,7 +351,8 @@ async function sendCommandHelp(messageSender = sendTextMessage) {
     '**기본 명령어**',
     '`!명령어` 또는 `!도움말` - 이 명령어 목록을 보여줍니다',
     '`!보스일정` - 다음 리젠 예정 시간과 남은 시간을 보여줍니다',
-    '`!보스백업` - 현재 보스 데이터를 GitHub Gist로 백업합니다',
+    '`!보스백업` - 현재 보스 데이터를 백업합니다',
+    '`!보스복구 [백업키]` - 백업키로 보스 데이터를 복구합니다',
     '',
     '**보스 처치 명령어**',
     '`!처치` 또는 `!컷` `[보스이름] [시간]` - 보스 처치를 기록합니다 (시간은 선택사항, 지정하지 않으면 현재 시간)'
@@ -460,5 +540,6 @@ export {
   addNewBoss,
   deleteBoss,
   sendCommandHelp,
-  sendBossBackup
+  sendBossBackup,
+  sendBossRestore
 };
