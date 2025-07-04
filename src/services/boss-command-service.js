@@ -22,12 +22,21 @@ async function uploadToGist(data) {
       return null;
     }
 
+    const backupTime = new Date().toISOString();
+    const backupInfo = {
+      ...data,
+      _backupInfo: {
+        backupTime: backupTime,
+        backupDate: new Date().toLocaleString('ko-KR')
+      }
+    };
+
     const gistData = {
-      description: `Boss data backup - ${new Date().toISOString()}`,
+      description: `Boss data backup - ${backupTime}`,
       public: false,
       files: {
         "bosses.json": {
-          content: JSON.stringify(data, null, 2)
+          content: JSON.stringify(backupInfo, null, 2)
         }
       }
     };
@@ -329,9 +338,23 @@ async function sendBossRestore(gistId, messageSender = sendTextMessage) {
     const data = await downloadFromGist(gistId);
     
     if (data) {
-      saveBossData(data);
+      // 백업 시점 정보 추출
+      let backupInfo = '';
+      if (data._backupInfo) {
+        const backupDate = data._backupInfo.backupDate || data._backupInfo.backupTime;
+        backupInfo = `\n📅 백업 시점: ${backupDate}`;
+        
+        // 백업 정보 제거하고 순수 보스 데이터만 저장
+        const { _backupInfo, ...pureData } = data;
+        saveBossData(pureData);
+      } else {
+        // 백업 정보가 없는 경우 (이전 버전 호환성)
+        saveBossData(data);
+        backupInfo = '\n📅 백업 시점: 알 수 없음 (이전 버전)';
+      }
+      
       const restoreTime = new Date().toLocaleString('ko-KR');
-      await messageSender(`✅ 복구가 완료되었습니다!\n\n📅 복구 시간: ${restoreTime}\n🔑 복구키: ${gistId}`);
+      await messageSender(`✅ 복구가 완료되었습니다!\n\n📅 복구 시간: ${restoreTime}${backupInfo}\n🔑 복구키: ${gistId}`);
     } else {
       await messageSender('❌ 복구 중 오류가 발생했습니다. 백업키를 확인해주세요.');
     }
