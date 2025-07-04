@@ -221,10 +221,25 @@ async function sendBossSchedule(messageSender = sendTextMessage) {
     return;
   }
   
-  let message = '```📅 보스 리젠 일정 📅\n';
+  let message = '```⭐️ 보스 리젠 일정 ⭐️\n';
+  let currentDate = null;
   
   for (const item of respawnList) {
     const { boss, formattedTime, minutesUntil, respawnTime } = item;
+    
+    // 날짜 구분선 추가
+    if (respawnTime) {
+      const respawnDate = new Date(respawnTime);
+      const dateStr = `📅 ${(respawnDate.getMonth() + 1).toString().padStart(2, '0')}-${respawnDate.getDate().toString().padStart(2, '0')}`;
+      
+      if (currentDate !== dateStr) {
+        if (currentDate !== null) {
+          message += '\n'; // 이전 날짜와 새 날짜 사이에 빈 줄 추가
+        }
+        message += `${dateStr}\n`;
+        currentDate = dateStr;
+      }
+    }
     
     let timeInfo;
     if (minutesUntil === null) {
