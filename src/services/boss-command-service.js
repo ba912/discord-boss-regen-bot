@@ -252,9 +252,9 @@ async function sendBossBackup(messageSender = sendTextMessage) {
     
     if (gistUrl) {
       const backupTime = new Date().toLocaleString('ko-KR');
-      await messageSender(`✅ 백업이 완료되었습니다!\n\n📅 백업 시간: ${backupTime}\n🔗 다운로드 링크: ${gistUrl}\n\n💡 배포 전에 이 링크의 내용을 복사해서 bosses.json에 붙여넣으세요.`);
+      await messageSender(`✅ 백업이 완료되었습니다!\n\n📅 백업 시간: ${backupTime}`);
     } else {
-      await messageSender('❌ 백업 중 오류가 발생했습니다. GITHUB_TOKEN을 확인해주세요.');
+      await messageSender('❌ 백업 중 오류가 발생했습니다.');
     }
   } catch (error) {
     console.error('보스 백업 중 오류:', error);
