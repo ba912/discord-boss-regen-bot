@@ -7,11 +7,15 @@ import { queueVoiceMessage } from '../tts/voice-queue.js';
 
 /**
  * 텍스트 메시지만 보내는 함수 (명령어 응답용)
- * @param {string} message - 보낼 메시지 내용
+ * @param {string|Object} messageOrContent - 보낼 메시지 내용 또는 메시지 객체
+ * @param {string} content - 보낼 메시지 내용 (messageOrContent가 객체인 경우)
  * @returns {Promise<boolean>} - 성공 여부
  */
-async function sendTextMessage(message) {
-  if (!message || message.trim() === '') {
+async function sendTextMessage(messageOrContent, content = null) {
+  // 매개변수 처리: messageOrContent가 객체면 content를 사용, 아니면 messageOrContent를 사용
+  const messageContent = content || messageOrContent;
+  
+  if (!messageContent || messageContent.trim() === '') {
     console.warn('빈 메시지로 인해 텍스트 메시지 전송이 건너뜀');
     return false;
   }
@@ -27,7 +31,7 @@ async function sendTextMessage(message) {
     const textChannel = await client.channels.fetch(channelId);
     if (textChannel && textChannel.type === ChannelType.GuildText) {
       await textChannel.send({
-        content: message
+        content: messageContent
       });
       console.log('텍스트 메시지가 전송되었습니다.');
       return true;
@@ -216,7 +220,7 @@ function setupMessageHandler() {
     // 보스 명령어 처리
     if (content.startsWith('!')) {
       try {
-        await processBossCommand(content);
+        await processBossCommand(content, message);
       } catch (error) {
         console.error('명령어 처리 중 오류:', error);
         message.channel.send('명령어 처리 중 오류가 발생했습니다.').catch(console.error);
@@ -233,6 +237,16 @@ function setupInteractionHandler() {
 
   client.on('interactionCreate', async (interaction) => {
     try {
+      // !보스추가 플로우: add_boss_로 시작하는 셀렉트/모달/버튼 상호작용 위임
+      if (
+        (interaction.isStringSelectMenu() && interaction.customId.startsWith('add_boss_')) ||
+        (interaction.type === 5 && interaction.customId && interaction.customId.startsWith('add_boss_')) || // ModalSubmit
+        (interaction.isButton() && interaction.customId.startsWith('add_boss_'))
+      ) {
+        const { handleAddBossInteraction } = await import('./boss-command-service.js');
+        await handleAddBossInteraction(interaction);
+        return;
+      }
       if (interaction.isChatInputCommand()) {
         // 슬래시 명령어 처리 (기존 handleInteraction 등으로 위임)
         const { handleInteraction } = await import('../commands/interaction-handler.js');

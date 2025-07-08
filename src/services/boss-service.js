@@ -163,6 +163,10 @@ function checkBossRespawns() {
     const notifications = [];
     
     for (const boss of data.bosses) {
+      // active가 false인 보스는 제외
+      if (boss.active === false) {
+        continue;
+      }
       const nextRespawnTime = calculateNextRespawnTime(boss);
       
       if (!nextRespawnTime) {
@@ -199,6 +203,10 @@ function getAllBossNextRespawns() {
     const respawnList = [];
     
     for (const boss of data.bosses) {
+      // active가 false인 보스는 제외
+      if (boss.active === false) {
+        continue;
+      }
       const nextRespawnTime = calculateNextRespawnTime(boss);
       
       if (nextRespawnTime) {

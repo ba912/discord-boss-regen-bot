@@ -35,7 +35,8 @@ const VOICE_NOTIFICATION_MESSAGES = {
  */
 async function sendBossNotifications() {
   try {
-    const notifications = checkBossRespawns();
+    // active 보스만 알림
+    const notifications = checkBossRespawns().filter(n => n.boss.active !== false);
     const sentNotifications = [];
     
     for (const notification of notifications) {
@@ -99,7 +100,8 @@ async function sendBossNotifications() {
  */
 async function sendBossScheduleList() {
   try {
-    const respawnList = getAllBossNextRespawns();
+    // active 보스만 일정 계산
+    const respawnList = getAllBossNextRespawns().filter(item => item.boss.active !== false);
     
     if (respawnList.length === 0) {
       await sendTextAndVoiceMessage('등록된 보스가 없습니다.');
