@@ -1,4 +1,4 @@
-import { TextChannel, ChannelType } from 'discord.js';
+import { TextChannel, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { generateTTSAudio } from '../tts/tts-service.js';
 import { playAudio } from '../discord/voice.js';
 import { client } from '../discord/client.js';
@@ -11,6 +11,10 @@ import { queueVoiceMessage } from '../tts/voice-queue.js';
  * @returns {Promise<boolean>} - 성공 여부
  */
 async function sendTextMessage(message) {
+  if (!message || message.trim() === '') {
+    console.warn('빈 메시지로 인해 텍스트 메시지 전송이 건너뜀');
+    return false;
+  }
   try {
     // 채널 ID 확인
     const channelId = process.env.CHANNEL_ID;
@@ -120,6 +124,61 @@ async function sendTextAndVoiceMessage(textMessage, voiceMessage = null, options
 }
 
 /**
+ * 버튼이 포함된 텍스트 메시지를 보내는 함수
+ * @param {string} message - 보낼 메시지 내용
+ * @param {Array} buttons - 버튼 배열 [{customId, label, style, emoji}]
+ * @returns {Promise<boolean>} - 성공 여부
+ */
+async function sendTextMessageWithButtons(message, buttons = []) {
+  try {
+    // 채널 ID 확인
+    const channelId = process.env.CHANNEL_ID;
+    if (!channelId) {
+      console.error('CHANNEL_ID가 .env 파일에 설정되어 있지 않습니다.');
+      return false;
+    }
+    
+    // 채널 가져오기
+    const textChannel = await client.channels.fetch(channelId);
+    if (textChannel && textChannel.type === ChannelType.GuildText) {
+      // 버튼 컴포넌트 생성
+      const components = [];
+      if (buttons.length > 0) {
+        const actionRow = new ActionRowBuilder();
+        
+        buttons.forEach(button => {
+          const buttonBuilder = new ButtonBuilder()
+            .setCustomId(button.customId)
+            .setLabel(button.label)
+            .setStyle(button.style || ButtonStyle.Primary);
+          
+          if (button.emoji) {
+            buttonBuilder.setEmoji(button.emoji);
+          }
+          
+          actionRow.addComponents(buttonBuilder);
+        });
+        
+        components.push(actionRow);
+      }
+      
+      await textChannel.send({
+        content: message,
+        components: components
+      });
+      console.log('버튼이 포함된 텍스트 메시지가 전송되었습니다.');
+      return true;
+    } else {
+      console.error('유효한 텍스트 채널을 찾을 수 없습니다.');
+      return false;
+    }
+  } catch (error) {
+    console.error('버튼 메시지 전송 중 오류:', error);
+    return false;
+  }
+}
+
+/**
  * 주기적으로 메시지를 보내는 타이머를 시작하는 함수
  * @param {Function} messageCallback - 메시지 내용을 생성하는 콜백 함수
  * @param {number} intervalMs - 메시지 전송 간격 (밀리초)
@@ -167,6 +226,107 @@ function setupMessageHandler() {
 }
 
 /**
+ * Discord 상호작용(슬래시 명령어, 버튼, 셀렉트 등) 통합 핸들러 설정
+ */
+function setupInteractionHandler() {
+  console.log('Discord 상호작용 핸들러가 설정되었습니다.');
+
+  client.on('interactionCreate', async (interaction) => {
+    try {
+      if (interaction.isChatInputCommand()) {
+        // 슬래시 명령어 처리 (기존 handleInteraction 등으로 위임)
+        const { handleInteraction } = await import('../commands/interaction-handler.js');
+        await handleInteraction(interaction);
+      } else if (interaction.isButton()) {
+        // 버튼 상호작용 처리
+        const { customId } = interaction;
+        const userId = interaction.user.id;
+        const username = interaction.user.username;
+        console.log(`버튼 클릭: ${customId} by ${username} (${userId})`);
+
+        // 최소 버튼 상호작용 테스트
+        if (customId === 'test_button_minimal') {
+          await interaction.reply({ content: '버튼 클릭됨!', ephemeral: true });
+          return;
+        }
+        // 보스 처치 확인 버튼 (컷 버튼)
+        if (customId.startsWith('boss_kill_')) {
+          const bossName = customId.replace(/^boss_kill_/, '').replace(/_\d+$/, '');
+          console.log(`보스 처치 버튼 처리 시작: ${bossName}`);
+          await handleBossKillButton(interaction, bossName);
+        } else {
+          console.log(`알 수 없는 버튼 customId: ${customId}`);
+        }
+      } else if (interaction.isStringSelectMenu()) {
+        // 셀렉트 메뉴 상호작용 처리 (필요시 구현)
+        await interaction.reply({ content: '셀렉트 메뉴 상호작용은 아직 지원하지 않습니다.', ephemeral: true });
+      }
+    } catch (error) {
+      console.error('상호작용 처리 중 오류:', error);
+      try {
+        if (!interaction.replied && !interaction.deferred) {
+          await interaction.reply({ content: '상호작용 처리 중 오류가 발생했습니다.', ephemeral: true });
+        } else {
+          await interaction.editReply({ content: '상호작용 처리 중 오류가 발생했습니다.' });
+        }
+      } catch (e) {
+        // 무시
+      }
+    }
+  });
+}
+
+/**
+ * 보스 처치 확인 버튼 처리
+ */
+async function handleBossKillButton(interaction, bossName) {
+  try {
+    // 보스 처치 기록
+    const { markBossKilled } = await import('./boss-command-service.js');
+    const success = await markBossKilled(bossName, null, async (message) => {
+      if (!interaction.replied && !interaction.deferred) {
+        await interaction.reply({ content: message });
+      } else {
+        // 이미 응답된 경우 editReply로 시도 (실패해도 무시)
+        try {
+          await interaction.editReply({ content: message });
+        } catch (e) {
+          // 무시
+        }
+      }
+    });
+    
+    if (success) {
+      // 원본 메시지의 버튼을 비활성화
+      const newComponents = interaction.message.components.map(row => {
+        const newRow = ActionRowBuilder.from(row);
+        newRow.components.forEach(component => {
+          component.setDisabled(true);
+        });
+        return newRow;
+      });
+      
+      await interaction.message.edit({
+        components: newComponents
+      });
+    }
+  } catch (error) {
+    console.error('보스 처치 버튼 처리 중 오류:', error);
+    if (!interaction.replied && !interaction.deferred) {
+      await interaction.reply({ 
+        content: '보스 처치 처리 중 오류가 발생했습니다.'
+      });
+    } else {
+      try {
+        await interaction.editReply({ content: '보스 처치 처리 중 오류가 발생했습니다.' });
+      } catch (e) {
+        // 무시
+      }
+    }
+  }
+}
+
+/**
  * 테스트 메시지 보내기 (데모용)
  */
 async function sendTestMessage() {
@@ -175,4 +335,13 @@ async function sendTestMessage() {
   console.log('테스트 메시지가 전송되었습니다:', new Date().toLocaleString('ko-KR'));
 }
 
-export { sendTextMessage, playVoiceMessage, sendTextAndVoiceMessage, startPeriodicMessages, sendTestMessage, setupMessageHandler };
+export { 
+  sendTextMessage, 
+  playVoiceMessage, 
+  sendTextAndVoiceMessage, 
+  sendTextMessageWithButtons,
+  startPeriodicMessages, 
+  sendTestMessage, 
+  setupMessageHandler,
+  setupInteractionHandler
+};

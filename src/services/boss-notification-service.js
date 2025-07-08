@@ -1,18 +1,19 @@
 import { checkBossRespawns, getAllBossNextRespawns } from './boss-service.js';
-import { sendTextAndVoiceMessage, sendTextMessage } from './message-service.js';
+import { sendTextAndVoiceMessage, sendTextMessage, sendTextMessageWithButtons } from './message-service.js';
 import { formatDate } from '../utils/time-utils.js';
+import { ButtonStyle } from 'discord.js';
 
 // 텍스트 알림 메시지 템플릿
 const TEXT_NOTIFICATION_MESSAGES = {
   // 5분 전 알림
   5: (boss, respawnTime) => {
     // return `⚠️ [보스 리젠 알림] ⚠️\n${boss.name}이(가) ${formatDate(respawnTime)}에 리젠됩니다. 아직 5분 남았습니다!`;
-    return `⚠️${boss.name}리젠 5분전`;
+    return `⚠️${boss.name} 5분전`;
   },
   // 1분 전 알림
   1: (boss, respawnTime) => {
     // return `🔴 [보스 리젠 임박] 🔴\n${boss.name}이(가) ${formatDate(respawnTime)}에 리젠됩니다. 1분 남았습니다! 준비하세요!`;
-    return `⚠️${boss.name}리젠 1분전`;
+    return `⚠️ ${boss.name} 1분전 \n`;
   }
 };
 
@@ -44,18 +45,43 @@ async function sendBossNotifications() {
       const textTemplate = TEXT_NOTIFICATION_MESSAGES[minutesUntil];
       const voiceTemplate = VOICE_NOTIFICATION_MESSAGES[minutesUntil];
       
-      if (!textTemplate || !voiceTemplate) continue;
+      if (!voiceTemplate) continue;
       
-      // 텍스트와 음성 메시지 생성
-      const textMessage = textTemplate(boss, respawnTime);
       const voiceMessage = voiceTemplate(boss);
       
-      // 메시지 전송 (텍스트와 음성 따로 전송)
-      await sendTextAndVoiceMessage(textMessage, voiceMessage, {
-        ttsOptions: {
-          lang: 'ko'  // 한국어 TTS 설정
+      if (minutesUntil === 1) {
+        if (!textTemplate) continue;
+        // 버튼을 노출하지 않을 보스 ID 목록
+        const excludeButtonBossIds = [56, 57, 58, 59, 60, 61, 62];
+        const shouldShowButton = !excludeButtonBossIds.includes(boss.id);
+        const textMessage = textTemplate(boss, respawnTime);
+        if (shouldShowButton) {
+          const buttons = [
+            {
+              customId: `boss_kill_${boss.name}`,
+              label: '컷',
+              style: ButtonStyle.Primary
+            }
+          ];
+          await sendTextMessageWithButtons(textMessage, buttons);
+        } else {
+          await sendTextMessage(textMessage);
         }
-      });
+        // 음성 메시지는 별도로 전송
+        await sendTextAndVoiceMessage(null, voiceMessage, {
+          ttsOptions: {
+            lang: 'ko'
+          }
+        });
+      } else if (minutesUntil === 5) {
+        // 5분 전에는 음성 메시지만 전송
+        await sendTextAndVoiceMessage(null, voiceMessage, {
+          ttsOptions: {
+            lang: 'ko'
+          }
+        });
+      }
+      // 기타 알림은 무시
       
       console.log(`보스 ${boss.name}의 ${minutesUntil}분 전 알림이 전송되었습니다.`);
       sentNotifications.push(notification);

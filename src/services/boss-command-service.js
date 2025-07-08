@@ -5,9 +5,10 @@ import {
   getBossList, 
   getAllBossNextRespawns 
 } from './boss-service.js';
-import { sendTextMessage } from './message-service.js';
+import { sendTextMessage, sendTextMessageWithButtons } from './message-service.js';
 import { runTestNotifications } from './test-service.js';
 import { formatDate, getCurrentKoreanTime, formatTime } from '../utils/time-utils.js';
+import { ButtonStyle } from 'discord.js';
 
 /**
  * GitHub Gist에 데이터를 업로드하는 함수
@@ -111,16 +112,34 @@ async function processBossCommand(command) {
       return true;
     }
     
-    // 테스트 명령어
+    // 테스트 명령어 (개발자용)
     if (mainCommand === '!테스트') {
       await runTestNotifications();
+      return true;
+    }
+    
+    // 버튼 테스트 명령어 (개발자용)
+    if (mainCommand === '!버튼테스트') {
+      await sendButtonTest();
+      return true;
+    }
+    
+    // 버튼 제외 목록 확인 명령어 (개발자용)
+    if (mainCommand === '!버튼제외목록') {
+      await sendButtonExcludeList();
+      return true;
+    }
+    
+    // !버튼테스트2 명령어
+    if (mainCommand === '!버튼테스트2') {
+      await sendButtonTest2();
       return true;
     }
     
     // 보스 처치 명령어
     if (mainCommand === '!처치' || mainCommand === '!컷') {
       if (args.length < 2) {
-        await sendTextMessage('사용법: !처치 [보스이름] [시간(optional, 1845 같은 형식)]');
+        await sendTextMessage('사용법: !컷 [보스이름] [시간(optional, 1845 같은 형식)]');
         return false;
       }
       
@@ -569,6 +588,66 @@ async function deleteBoss(name, messageSender = sendTextAndVoiceMessage) {
   }
 }
 
+/**
+ * 버튼 테스트 함수
+ * @param {Function} messageSender - 메시지 전송 함수 (선택사항)
+ */
+async function sendButtonTest(messageSender = sendTextMessageWithButtons) {
+  const testMessage = '테스트';
+  const uniqueId = Date.now();
+  const buttons = [
+    {
+      customId: `boss_kill_테스트보스_${uniqueId}`,
+      label: '컷',
+      style: ButtonStyle.Success,
+      emoji: ''
+    }
+  ];
+  await messageSender(testMessage, buttons);
+  console.log('버튼 테스트 메시지가 전송되었습니다.');
+}
+
+/**
+ * 버튼 제외 목록 확인 함수
+ * @param {Function} messageSender - 메시지 전송 함수 (선택사항)
+ */
+async function sendButtonExcludeList(messageSender = sendTextMessage) {
+  const excludeButtonBossIds = [56, 57, 58, 59, 60, 61, 62];
+  const data = loadBossData();
+  
+  let message = '🚫 **버튼 제외 보스 목록** 🚫\n\n';
+  
+  for (const bossId of excludeButtonBossIds) {
+    const boss = data.bosses.find(b => b.id === bossId);
+    if (boss) {
+      message += `🔹 **${boss.name}** (ID: ${boss.id})\n   📍 ${boss.location}\n   ⏰ ${boss.description}\n\n`;
+    } else {
+      message += `🔹 **알 수 없는 보스** (ID: ${bossId})\n\n`;
+    }
+  }
+  
+  message += `\n총 ${excludeButtonBossIds.length}개의 보스가 버튼 제외 목록에 있습니다.`;
+  
+  await messageSender(message);
+  console.log('버튼 제외 목록이 전송되었습니다.');
+}
+
+/**
+ * 최소 버튼 상호작용 테스트 함수
+ */
+async function sendButtonTest2(messageSender = sendTextMessageWithButtons) {
+  const testMessage = '🟢 최소 버튼 상호작용 테스트';
+  const buttons = [
+    {
+      customId: 'test_button_minimal',
+      label: '테스트 버튼',
+      style: ButtonStyle.Primary
+    }
+  ];
+  await messageSender(testMessage, buttons);
+  console.log('최소 버튼 테스트 메시지가 전송되었습니다.');
+}
+
 export {
   processBossCommand,
   sendBossList,
@@ -579,5 +658,8 @@ export {
   deleteBoss,
   sendCommandHelp,
   sendBossBackup,
-  sendBossRestore
+  sendBossRestore,
+  sendButtonTest,
+  sendButtonExcludeList,
+  sendButtonTest2
 };

@@ -8,7 +8,8 @@ const client = new Client({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent, // 메시지 내용 읽기 인텐트 추가 (슬래시 명령어 동작에 필수)
     GatewayIntentBits.GuildVoiceStates, // 음성 채널 사용을 위한 인텐트 추가
-    GatewayIntentBits.DirectMessages // DM 메시지 접근 허용
+    GatewayIntentBits.DirectMessages, // DM 메시지 접근 허용
+    GatewayIntentBits.GuildMessageReactions
   ],
   partials: ['CHANNEL'], // 부분적 객체 활성화
   rest: { timeout: 60000 }, // REST 타임아웃 증가

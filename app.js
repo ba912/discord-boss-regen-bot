@@ -5,7 +5,7 @@ import { verifyKeyMiddleware } from 'discord-interactions';
 // 모듈 가져오기
 import { client, setupClientReadyEvent, login } from './src/discord/client.js';
 import { connectToVoiceChannel } from './src/discord/voice.js';
-import { setupMessageHandler } from './src/services/message-service.js';
+import { setupMessageHandler, setupInteractionHandler } from './src/services/message-service.js';
 import { startBossNotificationSystem } from './src/services/boss-notification-service.js';
 import { setupShutdownHandlers } from './src/utils/shutdown.js';
 
@@ -40,6 +40,10 @@ async function initializeApp() {
         // 메시지 핸들러 설정 (!PREFIX 명령어 처리)
         setupMessageHandler();
         console.log('! 기반 메시지 명령어 처리기 설정 완료');
+        
+        // 버튼 핸들러 설정
+        setupInteractionHandler();
+        console.log('상호작용 이벤트 처리기 설정 완료');
         
         // 보스 알림 시스템 시작
         await startBossNotificationSystem();
