@@ -7,8 +7,7 @@
       "respawnHours": 18,
       "lastKilled": "2025-07-08T09:55:01.554Z",
       "description": "보스가 죽은 시간 이후 18시간마다 리젠",
-      "location": "검은 폭풍 반도",
-      "active": true
+      "location": "검은 폭풍 반도"
     },
     {
       "id": 2,
@@ -21,8 +20,7 @@
       "respawnTime": "12:30",
       "lastKilled": "2025-07-04T03:31:25.758Z",
       "description": "월/금 12:30에 리젠",
-      "location": "하얀 마녀의 요람",
-      "active": true
+      "location": "하얀 마녀의 요람"
     },
     {
       "id": 4,
@@ -35,8 +33,7 @@
       "respawnTime": "12:30",
       "lastKilled": "2025-07-01T03:32:32.898Z",
       "description": "화요일 12:30, 토요일 12:30에 리젠",
-      "location": "달빛 숙박",
-      "active": true
+      "location": "달빛 숙박"
     },
     {
       "id": 5,
@@ -45,8 +42,7 @@
       "respawnHours": 14,
       "lastKilled": "2025-07-08T07:24:41.599Z",
       "description": "보스가 죽은 시간 이후 14시간마다 리젠",
-      "location": "핏빛 그늘",
-      "active": true
+      "location": "핏빛 그늘"
     },
     {
       "id": 6,
@@ -59,8 +55,7 @@
       "respawnTime": "18:30",
       "lastKilled": "2025-06-16T09:10:00.000Z",
       "description": "월/금 오후 6시에 리젠",
-      "location": "폭주의 자국",
-      "active": true
+      "location": "폭주의 자국"
     },
     {
       "id": 9,
@@ -69,8 +64,7 @@
       "respawnHours": 18,
       "lastKilled": "2025-07-08T13:30:54.156Z",
       "description": "보스가 죽은 시간 이후 18시간마다 리젠",
-      "location": "실험체 연구실",
-      "active": true
+      "location": "실험체 연구실"
     },
     {
       "id": 10,
@@ -79,8 +73,7 @@
       "respawnHours": 24,
       "lastKilled": "2025-07-08T04:14:36.016Z",
       "description": "보스가 죽은 시간 이후 24시간마다 리젠",
-      "location": "죽은 자의 대지 1구역",
-      "active": true
+      "location": "죽은 자의 대지 1구역"
     },
     {
       "id": 11,
@@ -93,8 +86,7 @@
       "respawnTime": "18:30",
       "lastKilled": "2025-07-08T09:35:03.391Z",
       "description": "화요일/목요일 오후 6시에 리젠",
-      "location": "애증의 결전",
-      "active": true
+      "location": "애증의 결전"
     },
     {
       "id": 12,
@@ -103,8 +95,7 @@
       "respawnHours": 22,
       "lastKilled": "2025-07-08T04:10:38.444Z",
       "description": "보스가 죽은 시간 이후 22시간마다 리젠",
-      "location": "석회암곶",
-      "active": true
+      "location": "석회암곶"
     },
     {
       "id": 13,
@@ -113,8 +104,7 @@
       "respawnHours": 24,
       "lastKilled": "2025-07-08T04:07:21.211Z",
       "description": "보스가 죽은 시간 이후 24시간마다 리젠",
-      "location": "장미 덩굴 다리",
-      "active": true
+      "location": "장미 덩굴 다리"
     },
     {
       "id": 16,
@@ -123,8 +113,7 @@
       "respawnHours": 28,
       "lastKilled": "2025-07-07T15:59:16.871Z",
       "description": "보스가 죽은 시간 이후 28시간마다 리젠",
-      "location": "죽은 자의 대지 2구역",
-      "active": true
+      "location": "죽은 자의 대지 2구역"
     },
     {
       "id": 36,
@@ -133,8 +122,7 @@
       "respawnHours": 36,
       "lastKilled": "2025-07-07T15:53:40.936Z",
       "description": "보스가 죽은 시간 이후 36시간마다 리젠",
-      "location": "올가미 수렁",
-      "active": true
+      "location": "올가미 수렁"
     },
     {
       "id": 38,
@@ -143,8 +131,7 @@
       "respawnHours": 36,
       "lastKilled": "2025-07-07T15:57:21.425Z",
       "description": "보스가 죽은 시간 이후 48시간마다 리젠",
-      "location": "추종자 벌판",
-      "active": true
+      "location": "추종자 벌판"
     },
     {
       "id": 39,
@@ -153,8 +140,7 @@
       "respawnHours": 26,
       "lastKilled": "2025-07-08T00:01:24.851Z",
       "description": "보스가 죽은 시간 이후 26시간마다 리젠",
-      "location": "죽은 자의 대지 3구역",
-      "active": true
+      "location": "죽은 자의 대지 3구역"
     },
     {
       "id": 40,
@@ -166,8 +152,7 @@
       "respawnTime": "18:30",
       "lastKilled": "2025-06-28T09:32:26.238Z",
       "description": "토요일 오후 6시에 리젠",
-      "location": "애증의 결전",
-      "active": true
+      "location": "애증의 결전"
     },
     {
       "id": 41,
@@ -176,8 +161,7 @@
       "respawnHours": 26,
       "lastKilled": "2025-07-08T00:06:53.221Z",
       "description": "보스가 죽은 시간 이후 28시간마다 리젠",
-      "location": "사냥개의 가면극",
-      "active": true
+      "location": "사냥개의 가면극"
     },
     {
       "id": 42,
@@ -186,8 +170,7 @@
       "respawnHours": 26,
       "lastKilled": "2025-07-08T00:09:35.063Z",
       "description": "보스가 죽은 시간 이후 26시간마다 리젠",
-      "location": "가르바나 간척지",
-      "active": true
+      "location": "가르바나 간척지"
     },
     {
       "id": 43,
@@ -196,8 +179,7 @@
       "respawnHours": 36,
       "lastKilled": "2025-07-07T15:55:17.378Z",
       "description": "보스가 죽은 시간 이후 36시간마다 리젠",
-      "location": "눈 뜬 꼭두각시의 옥좌",
-      "active": true
+      "location": "눈 뜬 꼭두각시의 옥좌"
     },
     {
       "id": 44,
@@ -209,8 +191,7 @@
       "respawnTime": "16:00",
       "lastKilled": "2025-05-17T07:02:00.000Z",
       "description": "토요일 오후 4시에 리젠",
-      "location": "횃불 가도",
-      "active": true
+      "location": "횃불 가도"
     },
     {
       "id": 45,
@@ -222,8 +203,7 @@
       "respawnTime": "19:30",
       "lastKilled": null,
       "description": "수요일 오후 7시30분에 리젠",
-      "location": "가르바나 지하수로 1층",
-      "active": true
+      "location": "가르바나 지하수로 1층"
     },
     {
       "id": 46,
@@ -232,8 +212,7 @@
       "respawnHours": 46,
       "lastKilled": "2025-07-06T18:04:10.121Z",
       "description": "보스가 죽은 시간 이후 46시간마다 리젠",
-      "location": "칼리온의 무덤",
-      "active": true
+      "location": "칼리온의 무덤"
     },
     {
       "id": 47,
@@ -242,8 +221,7 @@
       "respawnHours": 46,
       "lastKilled": "2025-07-06T18:07:53.657Z",
       "description": "보스가 죽은 시간 이후 46시간마다 리젠",
-      "location": "후계자의 낙원",
-      "active": true
+      "location": "후계자의 낙원"
     },
     {
       "id": 48,
@@ -252,8 +230,7 @@
       "respawnHours": 46,
       "lastKilled": "2025-07-06T17:56:14.420Z",
       "description": "보스가 죽은 시간 이후 46시간마다 리젠",
-      "location": "황금피의 평원",
-      "active": true
+      "location": "황금피의 평원"
     },
     {
       "id": 49,
@@ -262,8 +239,7 @@
       "respawnHours": 46,
       "lastKilled": "2025-07-06T18:00:19.494Z",
       "description": "보스가 죽은 시간 이후 46시간마다 리젠",
-      "location": "황금피 평원",
-      "active": true
+      "location": "황금피 평원"
     },
     {
       "id": 50,
@@ -276,8 +252,7 @@
       "respawnTime": "19:30",
       "lastKilled": "2025-06-19T10:32:48.886Z",
       "description": "목/금 오후 7시30분에 리젠",
-      "location": "가르바나 지하수로 2층",
-      "active": true
+      "location": "가르바나 지하수로 2층"
     },
     {
       "id": 51,
@@ -289,8 +264,7 @@
       "respawnTime": "23:00",
       "lastKilled": null,
       "description": "토요일 오후 11시에 리젠",
-      "location": "칼리온의 무덤",
-      "active": true
+      "location": "칼리온의 무덤"
     },
     {
       "id": 52,
@@ -302,8 +276,7 @@
       "respawnTime": "22:00",
       "lastKilled": null,
       "description": "일요일 오후 10시에 리젠",
-      "location": "복수의 둥지",
-      "active": true
+      "location": "복수의 둥지"
     },
     {
       "id": 53,
@@ -316,8 +289,7 @@
       "respawnTime": "21:30",
       "lastKilled": "2025-06-10T12:37:00.000Z",
       "description": "화요일/토요일 오후 9시30분에 리젠",
-      "location": "영원한 종속의 예배당",
-      "active": true
+      "location": "영원한 종속의 예배당"
     },
     {
       "id": 54,
@@ -330,8 +302,7 @@
       "respawnTime": "23:00",
       "lastKilled": "2025-05-23T14:09:05.662Z",
       "description": "월/금 오후 11시에 리젠",
-      "location": "세크레타의 형벌",
-      "active": true
+      "location": "세크레타의 형벌"
     },
     {
       "id": 55,
@@ -343,8 +314,7 @@
       "respawnTime": "21:00",
       "lastKilled": null,
       "description": "일요일 오후 9시에 리젠",
-      "location": "가르바나 지하수로 3층",
-      "active": true
+      "location": "가르바나 지하수로 3층"
     },
     {
       "id": 56,
@@ -362,8 +332,7 @@
       "respawnTime": "00:00",
       "lastKilled": null,
       "description": "0시에 리젠",
-      "location": "월드",
-      "active": true
+      "location": "월드"
     },
     {
       "id": 57,
@@ -381,8 +350,7 @@
       "respawnTime": "06:00",
       "lastKilled": null,
       "description": "6시에 리젠",
-      "location": "월드",
-      "active": true
+      "location": "월드"
     },
     {
       "id": 58,
@@ -400,8 +368,7 @@
       "respawnTime": "12:00",
       "lastKilled": null,
       "description": "12시에 리젠",
-      "location": "월드",
-      "active": true
+      "location": "월드"
     },
     {
       "id": 59,
@@ -419,8 +386,7 @@
       "respawnTime": "18:00",
       "lastKilled": null,
       "description": "18시에 리젠",
-      "location": "월드",
-      "active": true
+      "location": "월드"
     },
     {
       "id": 60,
@@ -434,8 +400,7 @@
       "respawnTime": "20:30",
       "lastKilled": null,
       "description": "오후 8시 30분 시작",
-      "location": "아레나",
-      "active": true
+      "location": "아레나"
     },
     {
       "id": 61,
@@ -449,8 +414,7 @@
       "respawnTime": "20:30",
       "lastKilled": null,
       "description": "오후 8시 30분 시작",
-      "location": "아레나",
-      "active": true
+      "location": "아레나"
     },
     {
       "id": 62,
@@ -464,8 +428,7 @@
       "respawnTime": "20:25",
       "lastKilled": null,
       "description": "오후 8시 25분 시작",
-      "location": "아레나",
-      "active": true
+      "location": "아레나"
     },
     {
       "id": 63,
@@ -478,8 +441,7 @@
       "respawnTime": "22:00",
       "lastKilled": "2025-07-08T13:07:03.204Z",
       "description": "22시",
-      "location": "왕가의 계곡",
-      "active": true
+      "location": "왕가의 계곡"
     },
     {
       "id": 64,
@@ -492,8 +454,7 @@
       "respawnTime": "21:30",
       "lastKilled": null,
       "description": "오후 9시 30분 시작",
-      "location": "에블린의 바깥뜰",
-      "active": true
+      "location": "에블린의 바깥뜰"
     },
     {
       "id": 65,
@@ -505,8 +466,7 @@
       "respawnTime": "23:00",
       "lastKilled": null,
       "description": "23시",
-      "location": "셀린의 안뜰",
-      "active": true
+      "location": "셀린의 안뜰"
     },
     {
       "id": 66,
@@ -518,8 +478,7 @@
       "respawnTime": "19:30",
       "lastKilled": null,
       "description": "오후 7시 30분 시작",
-      "location": "침묵의 용광로",
-      "active": true
+      "location": "침묵의 용광로"
     },
     {
       "id": 67,
@@ -531,8 +490,7 @@
       "respawnTime": "22:00",
       "lastKilled": null,
       "description": "오후 10시 시작",
-      "location": "통제된 연구실",
-      "active": true
+      "location": "통제된 연구실"
     },
     {
       "id": 68,
@@ -541,8 +499,7 @@
       "respawnHours": 22,
       "lastKilled": "2025-07-08T04:03:50.635Z",
       "description": "보스가 죽은 시간 이후 22시간마다 리젠",
-      "location": "티리오사 무덤 지하2층",
-      "active": true
+      "location": "티리오사 무덤 지하2층"
     }
   ]
 }

@@ -8,9 +8,7 @@ import {
 import { sendTextMessage, sendTextMessageWithButtons } from './message-service.js';
 import { runTestNotifications } from './test-service.js';
 import { formatDate, getCurrentKoreanTime, formatTime } from '../utils/time-utils.js';
-import { ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, InteractionType } from 'discord.js';
-import fs from 'fs';
-import path from 'path';
+import { ButtonStyle } from 'discord.js';
 
 /**
  * GitHub Gist에 데이터를 업로드하는 함수
@@ -71,10 +69,9 @@ async function uploadToGist(data) {
 /**
  * 보스 명령어 처리 함수
  * @param {string} command - 명령어 문자열
- * @param {Object} message - 메시지 객체
  * @returns {Promise<boolean>} 처리 성공 여부
  */
-async function processBossCommand(command, message) {
+async function processBossCommand(command) {
   try {
     // 명령어 파싱
     const args = command.trim().split(/\s+/);
@@ -97,12 +94,6 @@ async function processBossCommand(command, message) {
       return true;
     }
     
-    // 보스 목록 명령어
-    if (mainCommand === '!보스목록') {
-      await sendBossList();
-      return true;
-    }
-    
     // 보스 백업 명령어
     if (mainCommand === '!보스백업') {
       await sendBossBackup();
@@ -112,7 +103,7 @@ async function processBossCommand(command, message) {
     // 보스 복구 명령어
     if (mainCommand === '!보스복구') {
       if (args.length < 2) {
-        await sendTextMessage(message, '사용법: !보스복구 [백업키]');
+        await sendTextMessage('사용법: !보스복구 [백업키]');
         return false;
       }
       
@@ -129,26 +120,26 @@ async function processBossCommand(command, message) {
     
     // 버튼 테스트 명령어 (개발자용)
     if (mainCommand === '!버튼테스트') {
-      await sendButtonTest(message);
+      await sendButtonTest();
       return true;
     }
     
     // 버튼 제외 목록 확인 명령어 (개발자용)
     if (mainCommand === '!버튼제외목록') {
-      await sendButtonExcludeList(message);
+      await sendButtonExcludeList();
       return true;
     }
     
     // !버튼테스트2 명령어
     if (mainCommand === '!버튼테스트2') {
-      await sendButtonTest2(message);
+      await sendButtonTest2();
       return true;
     }
     
     // 보스 처치 명령어
     if (mainCommand === '!처치' || mainCommand === '!컷') {
       if (args.length < 2) {
-        await sendTextMessage(message, '사용법: !컷 [보스이름] [시간(optional, 1845 같은 형식)]');
+        await sendTextMessage('사용법: !컷 [보스이름] [시간(optional, 1845 같은 형식)]');
         return false;
       }
       
@@ -183,50 +174,22 @@ async function processBossCommand(command, message) {
               killTime.setDate(killTime.getDate() - 1);
             }
           } else {
-            await sendTextMessage(message, '시간 형식이 잘못되었습니다. HHMM 형식(24시간제)을 사용해주세요.');
+            await sendTextMessage('시간 형식이 잘못되었습니다. HHMM 형식(24시간제)을 사용해주세요.');
             return false;
           }
         } else {
-          await sendTextMessage(message, '시간 형식이 잘못되었습니다. HHMM 형식(24시간제)을 사용해주세요.');
+          await sendTextMessage('시간 형식이 잘못되었습니다. HHMM 형식(24시간제)을 사용해주세요.');
           return false;
         }
       }
       
-      return await markBossKilled(bossName, killTime, message);
-    }
-    
-    // 보스추가 명령어 (대화형 입력)
-    if (mainCommand === '!보스추가') {
-      await handleAddBossCommand(message);
-      return true;
-    }
-    
-    // 보스제거 명령어
-    if (mainCommand === '!보스제거') {
-      if (args.length < 2) {
-        await sendTextMessage(message, '사용법: !보스제거 [보스이름]');
-        return false;
-      }
-      const bossName = args[1];
-      await handleRemoveBossCommand(message, bossName);
-      return true;
-    }
-    
-    // 보스비활성화 명령어
-    if (mainCommand === '!보스비활성화') {
-      if (args.length < 2) {
-        await sendTextMessage(message, '사용법: !보스비활성화 [보스이름]');
-        return false;
-      }
-      const bossName = args[1];
-      await handleDeactivateBossCommand(message, bossName);
-      return true;
+      return await markBossKilled(bossName, killTime);
     }
     
     return false;
   } catch (error) {
     console.error('보스 명령어 처리 중 오류:', error);
-    await sendTextMessage(message, '명령어 처리 중 오류가 발생했습니다.');
+    await sendTextMessage('명령어 처리 중 오류가 발생했습니다.');
     return false;
   }
 }
@@ -243,23 +206,23 @@ async function sendBossList(messageSender = sendTextMessage) {
     return;
   }
   
-  let message = '📎 **등록된 보스 목록** 📎\n\n';
+  let message = '📎 [등록된 보스 목록] 📎\n\n';
   
   for (const boss of bosses) {
-    // 리젠 타입에 따른 정보 표시
     let schedule;
     if (boss.respawnType === 'fixed_hour') {
-      schedule = `${boss.respawnHours}시간마다 리젠`;
+      schedule = `${boss.respawnHours}시간 마다 리젠`;
     } else if (boss.respawnType === 'fixed_days') {
       schedule = `${boss.respawnDays.join(', ')} ${boss.respawnTime}에 리젠`;
     } else {
-      schedule = '❓ 알 수 없는 리젠 타입';
+      schedule = '알 수 없음';
     }
     
-    // 활성화 상태 표시
-    const status = boss.active !== false ? '🟢 활성화' : '🔴 비활성화';
+    const lastKilled = boss.lastKilled ? 
+      `마지막 처치: ${formatDate(new Date(boss.lastKilled))}` : 
+      '마지막 처치: 기록 없음';
     
-    message += `**${boss.name}** / ${schedule} / ${status}\n`;
+    message += `💹 ${boss.name} (${boss.id})\n   ${schedule}\n   ${lastKilled}\n\n`;
   }
   
   await messageSender(message);
@@ -445,12 +408,8 @@ async function sendCommandHelp(messageSender = sendTextMessage) {
     '**기본 명령어**',
     '`!명령어` 또는 `!도움말` - 이 명령어 목록을 보여줍니다',
     '`!보스일정` - 다음 리젠 예정 시간과 남은 시간을 보여줍니다',
-    '`!보스목록` - 등록된 모든 보스의 상세 정보를 보여줍니다',
     '`!보스백업` - 현재 보스 데이터를 백업합니다',
     '`!보스복구 [백업키]` - 백업키로 보스 데이터를 복구합니다',
-    '`!보스추가` - 보스 추가를 위한 대화형 입력을 시작합니다',
-    '`!보스제거 [보스이름]` - 보스를 완전히 삭제합니다',
-    '`!보스비활성화 [보스이름]` - 보스를 비활성화합니다 (!보스일정에서 숨김)',
     '',
     '**보스 처치 명령어**',
     '`!처치` 또는 `!컷` `[보스이름] [시간]` - 보스 처치를 기록합니다 (시간은 선택사항, 지정하지 않으면 현재 시간)'
@@ -549,7 +508,7 @@ async function addNewBoss(name, typeInfo, location = '알 수 없음', messageSe
       // 시간 단위 리젠
       const hours = parseInt(typeInfo);
       if (isNaN(hours) || hours <= 0) {
-        await sendTextMessage(message, '시간 형식이 잘못되었습니다. 예: 12h');
+        await sendTextMessage('시간 형식이 잘못되었습니다. 예: 12h');
         return false;
       }
       
@@ -564,7 +523,7 @@ async function addNewBoss(name, typeInfo, location = '알 수 없음', messageSe
       
       // 시간 형식 검증 (HH:MM)
       if (!/^\d{1,2}:\d{2}$/.test(timeStr)) {
-        await sendTextMessage(message, '시간 형식이 잘못되었습니다. 예: 20:00');
+        await sendTextMessage('시간 형식이 잘못되었습니다. 예: 20:00');
         return false;
       }
       
@@ -572,7 +531,7 @@ async function addNewBoss(name, typeInfo, location = '알 수 없음', messageSe
       const validDays = ['일', '월', '화', '수', '목', '금', '토'];
       for (const day of days) {
         if (!validDays.includes(day)) {
-          await sendTextMessage(message, `유효하지 않은 요일: ${day}. 유효한 요일: 일, 월, 화, 수, 목, 금, 토`);
+          await sendTextMessage(`유효하지 않은 요일: ${day}. 유효한 요일: 일, 월, 화, 수, 목, 금, 토`);
           return false;
         }
       }
@@ -583,7 +542,7 @@ async function addNewBoss(name, typeInfo, location = '알 수 없음', messageSe
       newBoss.description = `${days.join('/')} ${timeStr}에 리젠`;
     } 
     else {
-      await sendTextMessage(message, '타입 형식이 잘못되었습니다. 예: 12h 또는 월,수,금/20:00');
+      await sendTextMessage('타입 형식이 잘못되었습니다. 예: 12h 또는 월,수,금/20:00');
       return false;
     }
     
@@ -689,342 +648,6 @@ async function sendButtonTest2(messageSender = sendTextMessageWithButtons) {
   console.log('최소 버튼 테스트 메시지가 전송되었습니다.');
 }
 
-// !보스추가 명령어 핸들러 (메시지 명령어 기반)
-async function handleAddBossCommand(message) {
-  // 1단계: 리젠 타입 선택 셀렉트 메뉴 전송
-  const selectRow = new ActionRowBuilder().addComponents(
-    new StringSelectMenuBuilder()
-      .setCustomId('add_boss_select_respawn_type')
-      .setPlaceholder('리젠 타입을 선택하세요')
-      .addOptions([
-        { label: 'N시간마다 리젠', value: 'fixed_hour' },
-        { label: '고정시간대 리젠', value: 'fixed_days' }
-      ])
-  );
-  await message.channel.send({
-    content: '보스 리젠 타입을 선택하세요.',
-    components: [selectRow]
-  });
-}
-
-// interaction 핸들러에서 셀렉트/모달/버튼 처리
-async function handleAddBossInteraction(interaction) {
-  // 2단계: 리젠 타입 선택 결과에 따라 모달 띄우기
-  if (interaction.isStringSelectMenu() && interaction.customId === 'add_boss_select_respawn_type') {
-    if (interaction.values[0] === 'fixed_hour') {
-      // N시간마다 리젠 모달
-      const modal = new ModalBuilder()
-        .setCustomId('add_boss_modal_fixed_hour')
-        .setTitle('N시간마다 리젠 보스 추가')
-        .addComponents(
-          new ActionRowBuilder().addComponents(
-            new TextInputBuilder()
-              .setCustomId('boss_name')
-              .setLabel('보스 이름')
-              .setStyle(TextInputStyle.Short)
-          ),
-          new ActionRowBuilder().addComponents(
-            new TextInputBuilder()
-              .setCustomId('respawn_hours')
-              .setLabel('몇 시간마다 리젠? (숫자만)')
-              .setStyle(TextInputStyle.Short)
-          ),
-          new ActionRowBuilder().addComponents(
-            new TextInputBuilder()
-              .setCustomId('active')
-              .setLabel('바로 보스일정에 노출할까요? (예/아니오)')
-              .setStyle(TextInputStyle.Short)
-          )
-        );
-      await interaction.showModal(modal);
-    } else if (interaction.values[0] === 'fixed_days') {
-      // 고정시간대 리젠 모달
-      const modal = new ModalBuilder()
-        .setCustomId('add_boss_modal_fixed_days')
-        .setTitle('고정시간대 리젠 보스 추가')
-        .addComponents(
-          new ActionRowBuilder().addComponents(
-            new TextInputBuilder()
-              .setCustomId('boss_name')
-              .setLabel('보스 이름')
-              .setStyle(TextInputStyle.Short)
-          ),
-          new ActionRowBuilder().addComponents(
-            new TextInputBuilder()
-              .setCustomId('respawn_days')
-              .setLabel('요일 (예: 월,수,금)')
-              .setStyle(TextInputStyle.Short)
-          ),
-          new ActionRowBuilder().addComponents(
-            new TextInputBuilder()
-              .setCustomId('respawn_time')
-              .setLabel('시간 (예: 20:00)')
-              .setStyle(TextInputStyle.Short)
-          ),
-          new ActionRowBuilder().addComponents(
-            new TextInputBuilder()
-              .setCustomId('active')
-              .setLabel('바로 보스일정에 노출할까요? (예/아니오)')
-              .setStyle(TextInputStyle.Short)
-          )
-        );
-      await interaction.showModal(modal);
-    }
-    // 셀렉트 메뉴 응답은 자동으로 처리됨
-    return;
-  }
-
-  // 3단계: 모달 제출/취소 처리
-  if (interaction.type === InteractionType.ModalSubmit) {
-    // 보스 이름 검증
-    const bossName = interaction.fields.getTextInputValue('boss_name');
-    if (/\s/.test(bossName)) {
-      await interaction.reply({
-        content: '❌ 보스 이름에는 띄어쓰기를 사용할 수 없습니다. 다시 시도해 주세요.',
-        ephemeral: true
-      });
-      return;
-    }
-    if (bossName.length === 0) {
-      await interaction.reply({
-        content: '❌ 보스 이름을 입력해주세요.',
-        ephemeral: true
-      });
-      return;
-    }
-    // bosses.json 경로
-    const bossesPath = path.join(process.cwd(), 'data', 'bosses.json');
-    const bossesData = JSON.parse(fs.readFileSync(bossesPath, 'utf-8'));
-    const bosses = bossesData.bosses;
-    // 마지막 id + 1
-    const newId = bosses.length > 0 ? Math.max(...bosses.map(b => b.id)) + 1 : 1;
-    // lastKilled: 현재 한국시간
-    const now = new Date();
-    now.setHours(now.getHours() + 9); // KST 변환
-    const lastKilled = now.toISOString();
-    // respawnType 분기
-    let newBoss = {
-      id: newId,
-      name: bossName,
-      lastKilled,
-      description: '',
-      location: '',
-      active: true // 기본값, 각 모달에서 재설정됨
-    };
-    if (interaction.customId === 'add_boss_modal_fixed_hour') {
-      // 시간 단위 리젠 검증
-      const respawnHoursInput = interaction.fields.getTextInputValue('respawn_hours');
-      
-      console.log('DEBUG: respawnHoursInput =', respawnHoursInput);
-      console.log('DEBUG: respawnHoursInput type =', typeof respawnHoursInput);
-      
-      // 빈 값 검증
-      if (!respawnHoursInput || respawnHoursInput.trim() === '') {
-        console.log('DEBUG: 빈 값 검증 실패');
-        await interaction.reply({
-          content: '❌ "몇 시간마다 리젠?"을 입력해주세요.',
-          ephemeral: true
-        });
-        return;
-      }
-      
-      // 숫자만 허용하는 정규식 검증
-      const trimmedInput = respawnHoursInput.trim();
-      console.log('DEBUG: trimmedInput =', trimmedInput);
-      console.log('DEBUG: 정규식 테스트 결과 =', /^\d+$/.test(trimmedInput));
-      
-      if (!/^\d+$/.test(trimmedInput)) {
-        console.log('DEBUG: 숫자 검증 실패');
-        await interaction.reply({
-          content: '❌ "몇 시간마다 리젠?"에는 숫자만 입력해주세요.',
-          ephemeral: true
-        });
-        return;
-      }
-      
-      const respawnHours = parseInt(trimmedInput);
-      console.log('DEBUG: respawnHours =', respawnHours);
-      
-      if (respawnHours <= 0 || respawnHours > 168) { // 168시간 = 7일
-        console.log('DEBUG: 범위 검증 실패');
-        await interaction.reply({
-          content: '❌ "몇 시간마다 리젠?"에는 1~168 사이의 숫자만 입력해주세요.',
-          ephemeral: true
-        });
-        return;
-      }
-      
-      // active 값 검증 (fixed_hour 모달용)
-      const activeInput = interaction.fields.getTextInputValue('active');
-      let active = true;
-      if (activeInput) {
-        const activeValue = activeInput.toLowerCase();
-        if (activeValue === '예' || activeValue === 'true' || activeValue === 'yes') {
-          active = true;
-        } else if (activeValue === '아니오' || activeValue === 'false' || activeValue === 'no') {
-          active = false;
-        } else {
-          await interaction.reply({
-            content: '❌ "바로 보스일정에 노출할까요?"에는 "예" 또는 "아니오"만 입력해주세요.',
-            ephemeral: true
-          });
-          return;
-        }
-      }
-      
-      console.log('DEBUG: 모든 검증 통과');
-      newBoss.respawnType = 'fixed_hour';
-      newBoss.respawnHours = respawnHours;
-      newBoss.active = active;
-    } else if (interaction.customId === 'add_boss_modal_fixed_days') {
-      // 고정시간대 리젠 검증
-      const daysInput = interaction.fields.getTextInputValue('respawn_days');
-      const timeInput = interaction.fields.getTextInputValue('respawn_time');
-      
-      // 요일 검증
-      if (daysInput.length === 0) {
-        await interaction.reply({
-          content: '❌ 요일을 입력해주세요. (예: 월,수,금 또는 수목금)',
-          ephemeral: true
-        });
-        return;
-      }
-      
-      // 시간 형식 검증 (HH:MM)
-      if (!/^\d{1,2}:\d{2}$/.test(timeInput)) {
-        await interaction.reply({
-          content: '❌ 시간 형식이 잘못되었습니다. HH:MM 형식으로 입력해주세요. (예: 20:00)',
-          ephemeral: true
-        });
-        return;
-      }
-      
-      // 시간 범위 검증
-      const [hours, minutes] = timeInput.split(':').map(Number);
-      if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-        await interaction.reply({
-          content: '❌ 시간 범위가 잘못되었습니다. 00:00~23:59 사이로 입력해주세요.',
-          ephemeral: true
-        });
-        return;
-      }
-      
-      // 요일 파싱: 쉼표가 있으면 쉼표로 분리, 없으면 개별 문자로 분리
-      let respawnDays;
-      if (daysInput.includes(',')) {
-        respawnDays = daysInput.split(',').map(d => d.trim());
-      } else {
-        respawnDays = daysInput.split('').map(d => d.trim()).filter(d => d.length > 0);
-      }
-      
-      // 유효한 요일인지 확인
-      const validDays = ['일', '월', '화', '수', '목', '금', '토'];
-      for (const day of respawnDays) {
-        if (!validDays.includes(day)) {
-          await interaction.reply({
-            content: `❌ 유효하지 않은 요일: ${day}. 유효한 요일: 일, 월, 화, 수, 목, 금, 토`,
-            ephemeral: true
-          });
-          return;
-        }
-      }
-      
-      // active 값 검증 (fixed_days 모달용)
-      const activeInput = interaction.fields.getTextInputValue('active');
-      let active = true;
-      if (activeInput) {
-        const activeValue = activeInput.toLowerCase();
-        if (activeValue === '예' || activeValue === 'true' || activeValue === 'yes') {
-          active = true;
-        } else if (activeValue === '아니오' || activeValue === 'false' || activeValue === 'no') {
-          active = false;
-        } else {
-          await interaction.reply({
-            content: '❌ "바로 보스일정에 노출할까요?"에는 "예" 또는 "아니오"만 입력해주세요.',
-            ephemeral: true
-          });
-          return;
-        }
-      }
-      
-      newBoss.respawnType = 'fixed_days';
-      newBoss.respawnDays = respawnDays;
-      newBoss.respawnTime = timeInput;
-      newBoss.active = active;
-    }
-    bosses.push(newBoss);
-    fs.writeFileSync(bossesPath, JSON.stringify(bossesData, null, 2), 'utf-8');
-    await interaction.reply({
-      content: '보스가 성공적으로 추가되어 일정에 반영되었습니다!',
-      ephemeral: true
-    });
-    return;
-  }
-
-  // 4단계: 제출/취소 버튼 처리
-  if (interaction.isButton()) {
-    if (interaction.customId === 'add_boss_submit') {
-      // 실제 bosses.json에 저장 (여기서는 주석)
-      // TODO: 입력값을 상태에서 꺼내서 저장
-      await interaction.update({ content: '보스가 성공적으로 추가되었습니다!', components: [] });
-    } else if (interaction.customId === 'add_boss_cancel') {
-      await interaction.update({ content: '보스 추가가 취소되었습니다.', components: [] });
-    }
-    return;
-  }
-}
-
-// !보스제거 명령어 구현
-async function handleRemoveBossCommand(message, bossName) {
-  try {
-    const fs = await import('fs');
-    const path = await import('path');
-    const bossesPath = path.join(process.cwd(), 'data', 'bosses.json');
-    const bossesData = JSON.parse(fs.readFileSync(bossesPath, 'utf-8'));
-    const bosses = bossesData.bosses;
-    const idx = bosses.findIndex(b => b.name === bossName);
-    if (idx === -1) {
-      await message.channel.send(`❌ 보스 "${bossName}"을(를) 찾을 수 없습니다.`);
-      return;
-    }
-    bosses.splice(idx, 1);
-    fs.writeFileSync(bossesPath, JSON.stringify(bossesData, null, 2), 'utf-8');
-    await message.channel.send(`✅ 보스 "${bossName}"이(가) 성공적으로 제거되었습니다.`);
-  } catch (error) {
-    console.error('보스 제거 중 오류:', error);
-    await message.channel.send('보스 제거 중 오류가 발생했습니다.');
-  }
-}
-
-// !보스비활성화 명령어 구현
-async function handleDeactivateBossCommand(message, bossName) {
-  try {
-    const fs = await import('fs');
-    const path = await import('path');
-    const bossesPath = path.join(process.cwd(), 'data', 'bosses.json');
-    const bossesData = JSON.parse(fs.readFileSync(bossesPath, 'utf-8'));
-    const bosses = bossesData.bosses;
-    const boss = bosses.find(b => b.name === bossName);
-    
-    if (!boss) {
-      await message.channel.send(`❌ 보스 "${bossName}"을(를) 찾을 수 없습니다.`);
-      return;
-    }
-    
-    if (!boss.active) {
-      await message.channel.send(`⚠️ 보스 "${bossName}"은(는) 이미 비활성화되어 있습니다.`);
-      return;
-    }
-    
-    boss.active = false;
-    fs.writeFileSync(bossesPath, JSON.stringify(bossesData, null, 2), 'utf-8');
-    await message.channel.send(`✅ 보스 "${bossName}"이(가) 비활성화되었습니다. 이제 !보스일정에서 표시되지 않습니다.`);
-  } catch (error) {
-    console.error('보스 비활성화 중 오류:', error);
-    await message.channel.send('보스 비활성화 중 오류가 발생했습니다.');
-  }
-}
-
 export {
   processBossCommand,
   sendBossList,
@@ -1038,8 +661,5 @@ export {
   sendBossRestore,
   sendButtonTest,
   sendButtonExcludeList,
-  sendButtonTest2,
-  handleAddBossCommand,
-  handleAddBossInteraction,
-  handleDeactivateBossCommand
+  sendButtonTest2
 };
