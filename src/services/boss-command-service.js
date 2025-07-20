@@ -5,7 +5,7 @@ import {
   getBossList, 
   getAllBossNextRespawns 
 } from './boss-service.js';
-import { sendTextMessage, sendTextMessageWithButtons } from './message-service.js';
+import { sendTextMessage, sendTextMessageWithButtons, sendTextAndVoiceMessage } from './message-service.js';
 import { runTestNotifications } from './test-service.js';
 import { formatDate, getCurrentKoreanTime, formatTime } from '../utils/time-utils.js';
 import { ButtonStyle } from 'discord.js';
@@ -133,6 +133,27 @@ async function processBossCommand(command) {
     // !버튼테스트2 명령어
     if (mainCommand === '!버튼테스트2') {
       await sendButtonTest2();
+      return true;
+    }
+    
+    // 음성 메시지 명령어
+    if (mainCommand === '!말') {
+      if (args.length < 2) {
+        await sendTextMessage('사용법: !말 [메시지]');
+        return false;
+      }
+      
+      // 첫 번째 인자(!말)를 제외하고 나머지를 모두 합쳐서 메시지로 만듦
+      const message = args.slice(1).join(' ');
+      
+      // 음성 메시지만 전송 (텍스트는 null)
+      await sendTextAndVoiceMessage(null, message, {
+        ttsOptions: {
+          lang: 'ko'
+        }
+      });
+      
+      console.log(`음성 메시지 전송: "${message}"`);
       return true;
     }
     
@@ -411,6 +432,9 @@ async function sendCommandHelp(messageSender = sendTextMessage) {
     '`!보스백업` - 현재 보스 데이터를 백업합니다',
     '`!보스복구 [백업키]` - 백업키로 보스 데이터를 복구합니다',
     '',
+    '**음성 명령어**',
+    '`!말 [메시지]` - 음성 채널에 메시지를 전송합니다',
+    '',
     '**보스 처치 명령어**',
     '`!처치` 또는 `!컷` `[보스이름] [시간]` - 보스 처치를 기록합니다 (시간은 선택사항, 지정하지 않으면 현재 시간)'
   ].join('\n');
@@ -439,7 +463,7 @@ async function markBossKilled(bossName, killTime = null, messageSender = sendTex
   const success = updateBossKillTime(boss.id, now);
   
   if (success) {
-    await messageSender(`${boss.name} 보스 처치 시간이 ${formatDate(now)}로 기록되었습니다.`);
+    await messageSender(`${boss.name} 컷 완료. 컷타임 : ${formatDate(now)}`);
     return true;
   } else {
     await messageSender(`${boss.name} 보스 처치 기록 중 오류가 발생했습니다.`);
