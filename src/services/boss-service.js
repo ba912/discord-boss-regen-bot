@@ -245,6 +245,53 @@ function getAllBossNextRespawns() {
 }
 
 /**
+ * fixed_hour 타입 보스 중 예상 리젠 시간보다 20분 이상 지났는데 컷타임 기록이 없는 보스들을 확인하는 함수
+ * @returns {Array} 알림이 필요한 보스 목록
+ */
+function checkOverdueFixedHourBosses() {
+  try {
+    const data = loadBossData();
+    const now = new Date();
+    const overdueBosses = [];
+    
+    for (const boss of data.bosses) {
+      // fixed_hour 타입 보스만 확인
+      if (boss.respawnType !== 'fixed_hour') {
+        continue;
+      }
+      
+      // 마지막 처치 시간이 없으면 건너뛰기
+      if (!boss.lastKilled) {
+        continue;
+      }
+      
+      const lastKilledTime = new Date(boss.lastKilled);
+      
+      // 마지막 처치 후 첫 번째 리젠 시간 계산
+      const firstRespawnTime = new Date(lastKilledTime);
+      firstRespawnTime.setHours(firstRespawnTime.getHours() + boss.respawnHours);
+      
+      // 첫 번째 리젠 시간이 현재보다 20분 이상 지났는지 확인
+      const minutesOverdue = getMinutesUntil(firstRespawnTime);
+      
+      if (minutesOverdue <= -20) { // 20분 이상 지남
+        overdueBosses.push({
+          boss: boss,
+          expectedRespawnTime: firstRespawnTime,
+          minutesOverdue: Math.abs(minutesOverdue),
+          lastKilledTime: lastKilledTime
+        });
+      }
+    }
+    
+    return overdueBosses;
+  } catch (error) {
+    console.error('지연된 fixed_hour 보스 확인 중 오류:', error);
+    return [];
+  }
+}
+
+/**
  * 보스 목록 가져오기
  * @returns {Array} 보스 목록
  */
@@ -265,5 +312,6 @@ export {
   calculateNextRespawnTime,
   checkBossRespawns,
   getAllBossNextRespawns,
-  getBossList
+  getBossList,
+  checkOverdueFixedHourBosses
 };

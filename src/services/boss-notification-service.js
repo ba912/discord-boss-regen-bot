@@ -1,4 +1,4 @@
-import { checkBossRespawns, getAllBossNextRespawns } from './boss-service.js';
+import { checkBossRespawns, getAllBossNextRespawns, checkOverdueFixedHourBosses } from './boss-service.js';
 import { sendTextAndVoiceMessage, sendTextMessage, sendTextMessageWithButtons } from './message-service.js';
 import { formatDate } from '../utils/time-utils.js';
 import { ButtonStyle } from 'discord.js';
@@ -33,6 +33,7 @@ const VOICE_NOTIFICATION_MESSAGES = {
  */
 async function sendBossNotifications() {
   try {
+    console.log('보스 리젠 알림 스케줄러 시작');
     const notifications = checkBossRespawns();
     const sentNotifications = [];
     
@@ -72,7 +73,9 @@ async function sendBossNotifications() {
           }
         });
       } else if (minutesUntil === 5) {
-        await sendTextMessage(textMessage);송
+        if (!textTemplate) continue;
+        const textMessage = textTemplate(boss, respawnTime);
+        await sendTextMessage(textMessage);
         await sendTextAndVoiceMessage(null, voiceMessage, {
           ttsOptions: {
             lang: 'ko'
@@ -85,9 +88,50 @@ async function sendBossNotifications() {
       sentNotifications.push(notification);
     }
     
+    console.log('보스 리젠 알림 스케줄러 종료');
+    
     return sentNotifications;
   } catch (error) {
     console.error('보스 알림 전송 중 오류:', error);
+    return [];
+  }
+}
+
+/**
+ * 지연된 fixed_hour 보스 알림을 보내는 함수
+ * @returns {Promise<Array>} 보낸 알림 목록
+ */
+async function sendOverdueBossNotifications() {
+  try {
+    console.log('지연된 보스 알림 확인 시작...');
+    const overdueBosses = checkOverdueFixedHourBosses();
+    console.log(`지연된 보스 수: ${overdueBosses.length}`);
+    
+    const sentNotifications = [];
+    
+    for (const overdueBoss of overdueBosses) {
+      const { boss, expectedRespawnTime, minutesOverdue, lastKilledTime } = overdueBoss;
+      
+      // 간결한 텍스트 메시지 생성
+      const textMessage = `‼️‼️‼️ ${boss.name} 컷타임 확인해주세요. 젠되고 ${minutesOverdue}분 지났습니다.`;
+      
+      // 텍스트 메시지만 전송
+      console.log(`지연 알림 전송 시도: ${textMessage}`);
+      const result = await sendTextMessage(textMessage);
+      console.log(`지연 알림 전송 결과: ${result}`);
+      
+      if (result) {
+        sentNotifications.push(overdueBoss);
+        console.log(`보스 ${boss.name}의 지연 알림이 성공적으로 전송되었습니다. (${minutesOverdue}분 지연)`);
+      } else {
+        console.error(`보스 ${boss.name}의 지연 알림 전송 실패`);
+      }
+    }
+    
+    console.log(`총 ${sentNotifications.length}개의 지연 알림이 전송되었습니다.`);
+    return sentNotifications;
+  } catch (error) {
+    console.error('지연된 보스 알림 전송 중 오류:', error);
     return [];
   }
 }
@@ -130,10 +174,14 @@ async function sendBossScheduleList() {
   }
 }
 
+// 전역 타이머 변수
+let bossNotificationTimer = null;
+let overdueBossTimer = null;
+
 /**
  * 보스 리젠 알림 시스템을 주기적으로 실행하는 함수
  * @param {number} intervalMs - 실행 간격 (밀리초)
- * @returns {Object} 타이머 객체
+ * @returns {Object} 타이머 객체들
  */
 function startBossNotificationSystem(intervalMs = 60000) {
   console.log(`보스 리젠 알림 시스템이 ${intervalMs / 1000}초 간격으로 시작됩니다.`);
@@ -141,13 +189,42 @@ function startBossNotificationSystem(intervalMs = 60000) {
   // 시작 시 한 번 실행
   sendBossNotifications();
   
-  // 주기적으로 실행
-  const timer = setInterval(sendBossNotifications, intervalMs);
-  return timer;
+  // 주기적으로 실행 (1분마다)
+  bossNotificationTimer = setInterval(sendBossNotifications, intervalMs);
+  
+  // 지연된 보스 알림은 10분마다 실행
+  console.log('지연된 보스 알림 시스템이 10분 간격으로 시작됩니다.');
+  
+  // 시작 시 한 번 실행
+  sendOverdueBossNotifications();
+  
+  // 10분마다 실행 (600000ms = 10분)
+  overdueBossTimer = setInterval(sendOverdueBossNotifications, 600000);
+  
+  return { timer: bossNotificationTimer, overdueTimer: overdueBossTimer };
+}
+
+/**
+ * 보스 알림 시스템을 정리하는 함수
+ */
+function stopBossNotificationSystem() {
+  if (bossNotificationTimer) {
+    clearInterval(bossNotificationTimer);
+    bossNotificationTimer = null;
+    console.log('보스 리젠 알림 타이머가 정리되었습니다.');
+  }
+  
+  if (overdueBossTimer) {
+    clearInterval(overdueBossTimer);
+    overdueBossTimer = null;
+    console.log('지연된 보스 알림 타이머가 정리되었습니다.');
+  }
 }
 
 export {
   sendBossNotifications,
   sendBossScheduleList,
-  startBossNotificationSystem
+  startBossNotificationSystem,
+  sendOverdueBossNotifications,
+  stopBossNotificationSystem
 };

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { client } from '../discord/client.js';
 import { disconnectVoiceChannel } from '../discord/voice.js';
+import { stopBossNotificationSystem } from '../services/boss-notification-service.js';
 
 /**
  * Graceful Shutdown 처리
@@ -8,6 +9,9 @@ import { disconnectVoiceChannel } from '../discord/voice.js';
  */
 async function performGracefulShutdown() {
   console.log('프로그램이 종료됩니다. 리소스 정리 중...');
+  
+  // 보스 알림 시스템 타이머 정리
+  stopBossNotificationSystem();
   
   // 음성 채널 연결 종료
   disconnectVoiceChannel();
